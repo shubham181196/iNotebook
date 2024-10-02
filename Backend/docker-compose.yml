@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  mongo_db:
+    container_name: mongo_dbContainer
+    image: mongo:latest
+    restart: always
+    ports:
+      - 2717:27017
+    volumes:
+      - mongo_db:/data/db
+      
+  
+  api:
+    container_name: apiService
+    build: 
+      context: . 
+      dockerfile: Dockerfile.dev
+    ports:
+      - 5004:5004
+    volumes:
+      - .:/usr/src/app
+    environment:
+      PORT: 5004
+      MONGO_URI: mongodb://mongo_db:27017/iNotebook
+      JWT_SECRET: shubhamIsAGoodPerson
+    depends_on:
+      - mongo_db
+
+
+
+
+volumes:
+  mongo_db: {}
